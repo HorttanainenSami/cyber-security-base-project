@@ -1,0 +1,40 @@
+{% extends "todo/base.html" %}
+
+{% block content %}
+<h1>Todo List</h1>
+<form method="post" action="/todo/add/">
+    {% csrf_token %}
+    <input type="text" name="todo" placeholder="Enter a new todo">
+    <input type="submit" value="Add Todo">
+</form>
+
+{% if latest_todo_list %}
+    <ul>
+    {% for todo in latest_todo_list %}
+    
+        <li style="display: flex; align-items: center; gap: 10px;">
+            <a href="/todo/{{ todo.id }}/">{{ todo.todo }}</a> 
+            <div>
+                {{ todo.completed|yesno:"(Completed),(Pending)" }}
+            </div>
+            <div>
+                {{ todo.pub_date }}
+            </div>
+            <form method="post" action="/todo/{{ todo.id }}/toggle/">
+                {% csrf_token %}
+                <input type="submit" value="Toggle">
+            </form>
+
+            <form method="post" action="/todo/{{ todo.id }}/delete/">
+                {% csrf_token %}
+                <input type="submit" value="Delete">
+            </form>
+
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No todos are available.</p>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,22 @@
+{%extends "todo/base.html" %}
+{% block content %}
+
+<h1>Search Todos</h1>
+<form method="get" action="/todo/search/">
+    <input type="text" name="query" placeholder="Search todos">
+    <input type="submit" value="Search">
+</form>
+
+<la>
+    {% if search_results %}
+        <ul>
+            {% for todo in search_results %}
+            <li><a href="/todo/{{ todo.id }}/">{{ todo.todo }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+    <p>No todos found.</p>
+    {% endif %}
+
+</la>
+{% endblock %}

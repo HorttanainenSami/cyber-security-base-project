@@ -1,0 +1,19 @@
+{% extends "todo/base.html" %}
+
+{% block content %}
+<div style="display: flex; flex-direction: column; align-items: center;" >
+
+    <h1>Login form</h1>
+    <form style="width: 300px; " method="post" action="/todo/accounts/login/">
+        {% csrf_token %}
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+        <error style="color: red;">{{ error_message }}</error>
+        <input type="text" name="username" placeholder="Username">
+        
+        <input type="password" name="password" placeholder="Password">
+        <input type="submit" value="Login">
+    </div>
+</form>
+<a href="/todo/accounts/register/"> Don't have a account? Register</a>
+</div>
+{% endblock %}

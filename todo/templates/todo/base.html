@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Todo app</title>
+</head>
+<body style="margin: 0px;">
+    <nav style="display: flex; gap: 10px; margin-bottom: 20px; background-color: #f0f0f0; padding: 10px;">
+        <a href="/todo/">All todos</a>
+        <a href="/todo/search/">Search</a>
+        <div style="margin-left: auto;">
+            {% if user.is_authenticated %}
+                <span>Welcome, {{ user.username }}!</span>
+                <a  href="/todo/accounts/logout/">logout</a>
+                {% else %}
+                <a href="/todo/accounts/login/">login</a>
+                {% endif %}
+        </div>
+    </nav>
+    <div style="margin: 20px;">
+
+        {% block content %}
+        
+        {% endblock %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{% extends "todo/base.html" %}
+
+{% block content %}
+<div style="display: flex; flex-direction: column; align-items: center;" >
+
+    <h1>Register form</h1>
+    <form style="width: 300px; " method="post" action="/todo/accounts/register/">
+        {% csrf_token %}
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+        <error style="color: red;">{{ error_message }}</error>
+        <input type="text" name="username" placeholder="Username">
+        <error style="color: red;">{{ password_error }}</error>
+        <input type="password" name="password" placeholder="Password">
+        <error style="color: red;">{{ confirm_password_error }}</error>
+        <input type="password" name="confirm_password" placeholder="Confirm password">
+        <input type="submit" value="Register">
+    </div>
+</form>
+<a href="/todo/accounts/login/">Already have an account? Login</a>
+</div>
+{% endblock %}
