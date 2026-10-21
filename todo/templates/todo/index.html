@@ -4,6 +4,7 @@
 <h1>Todo List</h1>
 <form method="post" action="/todo/add/">
     {% csrf_token %}
+    <input type="hidden" name="next" value="{{ request.get_full_path }}" />
     <input type="text" name="todo" placeholder="Enter a new todo">
     <input type="submit" value="Add Todo">
 </form>
@@ -22,6 +23,7 @@
             </div>
             <form method="post" action="/todo/{{ todo.id }}/toggle/">
                 {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.get_full_path }}" />
                 <input type="submit" value="Toggle">
             </form>
 

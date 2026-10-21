@@ -1,16 +1,18 @@
 from django.contrib import admin
 from django.urls import path
 
-from todo import views
+from todo.views import auth, todo
 
 urlpatterns = [
-    path("", views.index, name="index"),
-    path("search/", views.search, name="search"),
-    path("<int:todo_id>/delete/", views.delete_todo, name="delete_todo"),
-    path("<int:todo_id>/toggle/", views.toggle_todo, name="toggle_todo"),
-    path("add/", views.add_todo, name="add_todo"),
-    path("accounts/login/", views.login_view, name="login"),
-    path("accounts/register/", views.register_view, name="register"),
-    path("accounts/logout/", views.logout_view, name="logout"),
+    path("", todo.index, name="index"),
+    path("search/", todo.search, name="search"),
+    path("<int:todo_id>/delete/", todo.delete_todo, name="delete_todo"),
+    path("<int:todo_id>/toggle/", todo.toggle_todo, name="toggle_todo"),
+    path("<int:todo_id>/", todo.todo_detail, name="todo_detail"),
+    path("<int:todo_id>/update/", todo.update_todo, name="update_todo"),
+    path("add/", todo.add_todo, name="add_todo"),
+    path("accounts/login/", auth.login_view, name="login"),
+    path("accounts/register/", auth.register_view, name="register"),
+    path("accounts/logout/", auth.logout_view, name="logout"),
     # ex: /todo/5/
 ]

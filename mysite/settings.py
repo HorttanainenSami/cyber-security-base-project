@@ -29,6 +29,17 @@ ALLOWED_HOSTS = []
 
 LOGIN_URL = '/todo/accounts/login/'
 
+PASSWORD_HASHERS = [
+    "django.contrib.auth.hashers.MD5PasswordHasher",
+]
+# FIX #2
+# PASSWORD_HASHERS = [
+#     "django.contrib.auth.hashers.Argon2PasswordHasher",
+#     "django.contrib.auth.hashers.MD5PasswordHasher",
+# ]
+
+
+
 # Application definition
 
 INSTALLED_APPS = [

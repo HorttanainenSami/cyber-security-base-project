@@ -1,0 +1,33 @@
+{%extends "todo/base.html" %}
+{% block content %}
+
+<h1>Todo</h1>
+<div>
+    {% if todo %}
+    <form method="post" action="/todo/{{ todo.id }}/update/">
+        {% csrf_token %}
+        {% if message %}
+            <p>{{ message }}</p>
+        {% endif %}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+        <input type="text" name="todo" value="{{ todo.todo }}" />
+        <input type="submit" value="Update" />
+  
+    </form>
+    <form method="post" action="/todo/{{ todo.id }}/toggle/">
+        {% csrf_token %}
+
+        <p>Status: {{ todo.completed|yesno:"Completed,Not Completed" }}</p>
+        <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+        <input type="submit" value="toggle" />
+    </form>
+    <form method="post" action="/todo/{{ todo.id }}/delete/">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+        <input type="submit" value="Delete" />
+    </form>
+    {% else %}
+        <p>Todo not found.</p>
+    {% endif %}
+</div>
+{% endblock %}
