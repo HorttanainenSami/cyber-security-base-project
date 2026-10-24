@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_GET, require_POST
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
@@ -13,11 +13,31 @@ from ..models import Todo
 def get_user_todos(user):
     return Todo.objects.filter(owner=user).order_by("-pub_date")[:5]
 
+# vulnerability 5 start
+@require_GET
+@login_required
+def admin_todos(request):
+    if request.GET.get("is_staff") == "true":
+        todos = Todo.objects.all().order_by("-pub_date")
+        return render(request, "todo/index.html", {"latest_todo_list": todos})
+    return redirect("index")
+# vulnerability 5 end
+#fix 5
+# @require_GET
+# @login_required
+# def admin_todos(request):
+#     if request.user.is_staff == True:
+#         todos = Todo.objects.all().order_by("-pub_date")
+#         return render(request, "todo/index.html", {"latest_todo_list": todos})
+#     return redirect("index")
+
+
 @login_required
 def index(request):
     context = {"latest_todo_list": get_user_todos(request.user)}
     return render(request, "todo/index.html", context)
 
+# vulnerability 4 start
 @login_required
 def search(request):
     search_query = request.GET.get("query", "")
@@ -29,7 +49,9 @@ def search(request):
         todos = [{"id": r[0], "todo": r[1]} for r in cursor.fetchall()]
     context = {"search_results": todos}
     return render(request, "todo/search.html", context)
+# vulneratibility 4 end
 
+# #fix 4
 # @login_required
 # def search(request):
 #     search_query = request.GET.get("query", "")

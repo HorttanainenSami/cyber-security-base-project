@@ -14,6 +14,9 @@
     <nav style="display: flex; gap: 10px; margin-bottom: 20px; background-color: #f0f0f0; padding: 10px;">
         <a href="/todo/">All todos</a>
         <a href="/todo/search/">Search</a>
+        {% if user.is_authenticated and user.is_staff %}
+            <a href="/todo/admin/?is_staff=true">Admin view</a>
+        {% endif %}
         <div style="margin-left: auto;">
             {% if user.is_authenticated %}
                 <span>Welcome, {{ user.username }}!</span>

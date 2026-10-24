@@ -5,6 +5,7 @@ from todo.views import auth, todo
 
 urlpatterns = [
     path("", todo.index, name="index"),
+    path("admin/", todo.admin_todos, name="admin_todos"),
     path("search/", todo.search, name="search"),
     path("<int:todo_id>/delete/", todo.delete_todo, name="delete_todo"),
     path("<int:todo_id>/toggle/", todo.toggle_todo, name="toggle_todo"),

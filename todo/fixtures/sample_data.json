@@ -1,0 +1,61 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "username": "admin",
+      "password": "md5$Xk3pQ9vL2mT7wR4zN8bY1c$575fcbf403e4e953e45b9a74f7ecd25f",
+      "is_staff": true,
+      "is_superuser": true,
+      "date_joined": "2026-10-20T12:00:00Z"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+      "username": "joni",
+      "password": "md5$Hs6jD2fK9qW4eR7tY1uP3a$930b66401472d81c3e9d52b15a5e0bed",
+      "date_joined": "2026-10-20T12:00:00Z"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 3,
+    "fields": {
+      "username": "jaska",
+      "password": "md5$Mn5bV8cX2zL4kJ7hG1fD9s$a62adb4573d67201bcedad40c2ab45b9",
+      "date_joined": "2026-10-20T12:00:00Z"
+    }
+  },
+  {
+    "model": "todo.todo",
+    "pk": 1,
+    "fields": {"todo": "Admin todo", "pub_date": "2026-10-20T12:00:00Z", "owner": 1, "completed": false}
+  },
+  {
+    "model": "todo.todo",
+    "pk": 2,
+    "fields": {"todo": "Admin todo 2", "pub_date": "2026-10-20T12:05:00Z", "owner": 1, "completed": true}
+  },
+  {
+    "model": "todo.todo",
+    "pk": 3,
+    "fields": {"todo": "Joni todo 1", "pub_date": "2026-10-20T12:10:00Z", "owner": 2, "completed": false}
+  },
+  {
+    "model": "todo.todo",
+    "pk": 4,
+    "fields": {"todo": "Joni todo 2", "pub_date": "2026-10-20T12:15:00Z", "owner": 2, "completed": false}
+  },
+  {
+    "model": "todo.todo",
+    "pk": 5,
+    "fields": {"todo": "Jaska todo 1", "pub_date": "2026-10-20T12:20:00Z", "owner": 3, "completed": false}
+  },
+  {
+    "model": "todo.todo",
+    "pk": 6,
+    "fields": {"todo": "Jaska todo 2", "pub_date": "2026-10-20T12:25:00Z", "owner": 3, "completed": true}
+  }
+]

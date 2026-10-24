@@ -29,10 +29,12 @@ ALLOWED_HOSTS = []
 
 LOGIN_URL = '/todo/accounts/login/'
 
+# vulnerability 2
 PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.MD5PasswordHasher",
 ]
-# FIX #2
+
+# # FIX #2
 # PASSWORD_HASHERS = [
 #     "django.contrib.auth.hashers.Argon2PasswordHasher",
 #     "django.contrib.auth.hashers.MD5PasswordHasher",
