@@ -24,7 +24,7 @@ joni:password123
 ## FLAW 1: 
 ## A07:2021 - Identification and Authentication Failures 
 - bruteforce allowed
-https://github.com/HorttanainenSami/cyber-security-base-project/blob/9bb402dc22343d06198d91b93ef204bbbe0a9154/todo/views/auth.py#L16
+https://github.com/HorttanainenSami/cyber-security-base-project/blob/35b76e79c4da3ed6c24c01ab5b36eeb4942fe9a8/todo/views/auth.py#L35
 
 Problem in login is that user can retry login attempts without any timeouts. The absence of the rate limiting is reason that the malicious user can guess passwords with a brute force.
 
@@ -32,7 +32,7 @@ Problem in login is that user can retry login attempts without any timeouts. The
 run `python scripts/flaw_1.py` in root directory
 
 ### How to fix:
-https://github.com/HorttanainenSami/cyber-security-base-project/blob/b22783680b65df50483c819c65e13a6cd1859893/todo/views/auth.py#L31
+https://github.com/HorttanainenSami/cyber-security-base-project/blob/35b76e79c4da3ed6c24c01ab5b36eeb4942fe9a8/todo/views/auth.py#L50
 
 The fix for the problem is by introducing a rate limiter with Django’s built in cache. By storing failed login attempts from same IP and limiting after 5 consecutive failed logins from the same IP for the next minute.
 
@@ -73,19 +73,21 @@ after ![](https://raw.github.com/HorttanainenSami/cyber-security-base-project/ma
 ## FLAW 3:
 ## A09:2021 - Security Logging and Monitoring Failures 
 - successful and failed logins not logged
-https://github.com/HorttanainenSami/cyber-security-base-project/blob/b22783680b65df50483c819c65e13a6cd1859893/todo/views/auth.py#L16
+if fix 1 is not in place
+https://github.com/HorttanainenSami/cyber-security-base-project/blob/35b76e79c4da3ed6c24c01ab5b36eeb4942fe9a8/todo/views/auth.py#L35 
+or if fix 1 is in place
+https://github.com/HorttanainenSami/cyber-security-base-project/blob/35b76e79c4da3ed6c24c01ab5b36eeb4942fe9a8/todo/views/auth.py#L50 
+https://github.com/HorttanainenSami/cyber-security-base-project/blob/35b76e79c4da3ed6c24c01ab5b36eeb4942fe9a8/todo/views/auth.py#L74
 
 Application is not logging any actions of authentication logic. This is problematic as if the software is under a on going attack some logging monitor could detect ongoing attack and make safety measures to prevent it. And if the attacker gains access to software there is not enough logs to trace what attacker has been doing inside our software.
 
 
 ### How to fix:
-https://github.com/HorttanainenSami/cyber-security-base-project/blob/b22783680b65df50483c819c65e13a6cd1859893/todo/views/auth.py#L8
-https://github.com/HorttanainenSami/cyber-security-base-project/blob/b22783680b65df50483c819c65e13a6cd1859893/todo/views/auth.py#L31
-https://github.com/HorttanainenSami/cyber-security-base-project/blob/b22783680b65df50483c819c65e13a6cd1859893/todo/views/auth.py#L39
-https://github.com/HorttanainenSami/cyber-security-base-project/blob/b22783680b65df50483c819c65e13a6cd1859893/todo/views/auth.py#L47
-https://github.com/HorttanainenSami/cyber-security-base-project/blob/b22783680b65df50483c819c65e13a6cd1859893/todo/views/auth.py#L54
-https://github.com/HorttanainenSami/cyber-security-base-project/blob/b22783680b65df50483c819c65e13a6cd1859893/todo/views/auth.py#L73
-This fix requires the fix 1 to be in place. All places that needs to be uncommented are above
+https://github.com/HorttanainenSami/cyber-security-base-project/blob/35b76e79c4da3ed6c24c01ab5b36eeb4942fe9a8/todo/views/auth.py#L8
+https://github.com/HorttanainenSami/cyber-security-base-project/blob/35b76e79c4da3ed6c24c01ab5b36eeb4942fe9a8/todo/views/auth.py#L90
+if fix 1 is in place we need also this
+https://github.com/HorttanainenSami/cyber-security-base-project/blob/35b76e79c4da3ed6c24c01ab5b36eeb4942fe9a8/todo/views/auth.py#L58
+
 
 We are using python library logging, its easy way to get logs to separate file that way we have persistent logs and they aren’t lost when the server is restarted. The separate file allows us to use external monitoring tools for our logs. It also allows to attach timestamp, IP, etc for every action that is logged. 
 
