@@ -24,7 +24,8 @@ joni:password123
 ## FLAW 1: 
 ## A07:2021 - Identification and Authentication Failures 
 - bruteforce allowed
-https://github.com/HorttanainenSami/cyber-security-base-project/blob/35b76e79c4da3ed6c24c01ab5b36eeb4942fe9a8/todo/views/auth.py#L35
+
+https://github.com/HorttanainenSami/cyber-security-base-project/blob/230abc2d8cbe37847a6f8981c079cb4849dbd19b/todo/views/auth.py#L35
 
 Problem in login is that user can retry login attempts without any timeouts. The absence of the rate limiting is reason that the malicious user can guess passwords with a brute force.
 
@@ -32,18 +33,19 @@ Problem in login is that user can retry login attempts without any timeouts. The
 run `python scripts/flaw_1.py` in root directory
 
 ### How to fix:
-https://github.com/HorttanainenSami/cyber-security-base-project/blob/35b76e79c4da3ed6c24c01ab5b36eeb4942fe9a8/todo/views/auth.py#L50
+https://github.com/HorttanainenSami/cyber-security-base-project/blob/230abc2d8cbe37847a6f8981c079cb4849dbd19b/todo/views/auth.py#L50
 
 The fix for the problem is by introducing a rate limiter with Django’s built in cache. By storing failed login attempts from same IP and limiting after 5 consecutive failed logins from the same IP for the next minute.
 
-Limitations: Bot farm could use multiple IP’s to brute force the password. Rate limiting the login attempts by IP and username would prevent bot farm from brute forcing certain users password but it would also enable malicious user to lock usernames indefinitely from login by continuing failing the login attempts for one username. 
+Limitations: Bot farm could use multiple IP’s to brute force the password. Rate limiting the login attempts by IP and username would prevent bot farm from brute forcing certain users password but it would also enable malicious user to lock usernames indefinitely from login by continuing failing the login attempts for one username. Also this doesnt work for /admin/login as that route uses Djangos own authentication view and we made rate limiter for auth.py
 ### Screenshots
-before ![](https://raw.github.com/HorttanainenSami/cyber-security-base-project/main/screenshots/flaw_1_before.png)
-after ![](https://raw.github.com/HorttanainenSami/cyber-security-base-project/main/screenshots/flaw_1_after.png)
+before ![](https://raw.github.com/HorttanainenSami/cyber-security-base-project/main/screenshots/flaw-1-before-1.png)
+after ![](https://raw.github.com/HorttanainenSami/cyber-security-base-project/main/screenshots/flaw-1-after-1.png)
 
 ## FLAW 2:
 ## A02:2021 - Cryptographic Failures 
 - weak password hashing
+
 https://github.com/HorttanainenSami/cyber-security-base-project/blob/9bb402dc22343d06198d91b93ef204bbbe0a9154/mysite/settings.py#L32
 
 Weak password hashing: Problem is that if we use MD5 which is weak hashing algorithm. Our application users are in danger if their passwords are leaked for example with SQL injection like in our FLAW 4.  Because application is using weak password hashing algorithm, malicious actor could easily break the snatched password.
@@ -60,7 +62,7 @@ Go to http://127.0.0.1:8000/admin/auth/user/1/change/
 under password: you can see there is algorithm used: MD5
 
 ### How to fix: 
-https://github.com/HorttanainenSami/cyber-security-base-project/blob/b22783680b65df50483c819c65e13a6cd1859893/mysite/settings.py#L37
+https://github.com/HorttanainenSami/cyber-security-base-project/blob/230abc2d8cbe37847a6f8981c079cb4849dbd19b/mysite/settings.py#L37
 
 Use the latest and up-to-date password hashing algorithm. Owasp is recommending the Argon2 password hasher that is developed to be slow and resource heavy so it would be expensive to try crack passwords hashed with Argon2. In fix the MD5 still remains as a second in the list. When user with MD5 hashed password logs in, Django verifies it with MD5 and rehashes that with Argon2
 
@@ -68,38 +70,41 @@ Retry steps in how to test
 make sure you logout and then relogin as the password is then changed to Argon2
 
 ### Screenshots
-before ![](https://raw.github.com/HorttanainenSami/cyber-security-base-project/main/screenshots/flaw_2_before.png)
-after ![](https://raw.github.com/HorttanainenSami/cyber-security-base-project/main/screenshots/flaw_2_after.png)
+before ![](https://raw.github.com/HorttanainenSami/cyber-security-base-project/main/screenshots/flaw-2-before-1.png)
+after ![](https://raw.github.com/HorttanainenSami/cyber-security-base-project/main/screenshots/flaw-2-after-1.png)
 ## FLAW 3:
 ## A09:2021 - Security Logging and Monitoring Failures 
 - successful and failed logins not logged
-if fix 1 is not in place
-https://github.com/HorttanainenSami/cyber-security-base-project/blob/35b76e79c4da3ed6c24c01ab5b36eeb4942fe9a8/todo/views/auth.py#L35 
-or if fix 1 is in place
-https://github.com/HorttanainenSami/cyber-security-base-project/blob/35b76e79c4da3ed6c24c01ab5b36eeb4942fe9a8/todo/views/auth.py#L50 
-https://github.com/HorttanainenSami/cyber-security-base-project/blob/35b76e79c4da3ed6c24c01ab5b36eeb4942fe9a8/todo/views/auth.py#L74
+
+
+https://github.com/HorttanainenSami/cyber-security-base-project/blob/230abc2d8cbe37847a6f8981c079cb4849dbd19b/todo/views/auth.py#L35
+
+https://github.com/HorttanainenSami/cyber-security-base-project/blob/230abc2d8cbe37847a6f8981c079cb4849dbd19b/todo/views/auth.py#L74
 
 Application is not logging any actions of authentication logic. This is problematic as if the software is under a on going attack some logging monitor could detect ongoing attack and make safety measures to prevent it. And if the attacker gains access to software there is not enough logs to trace what attacker has been doing inside our software.
 
 
 ### How to fix:
-https://github.com/HorttanainenSami/cyber-security-base-project/blob/35b76e79c4da3ed6c24c01ab5b36eeb4942fe9a8/todo/views/auth.py#L8
-https://github.com/HorttanainenSami/cyber-security-base-project/blob/35b76e79c4da3ed6c24c01ab5b36eeb4942fe9a8/todo/views/auth.py#L90
+https://github.com/HorttanainenSami/cyber-security-base-project/blob/230abc2d8cbe37847a6f8981c079cb4849dbd19b/todo/views/auth.py#L8
+https://github.com/HorttanainenSami/cyber-security-base-project/blob/230abc2d8cbe37847a6f8981c079cb4849dbd19b/todo/views/auth.py#L90
+
 if fix 1 is in place we need also this
-https://github.com/HorttanainenSami/cyber-security-base-project/blob/35b76e79c4da3ed6c24c01ab5b36eeb4942fe9a8/todo/views/auth.py#L58
+
+https://github.com/HorttanainenSami/cyber-security-base-project/blob/230abc2d8cbe37847a6f8981c079cb4849dbd19b/todo/views/auth.py#L58
 
 
-We are using python library logging, its easy way to get logs to separate file that way we have persistent logs and they aren’t lost when the server is restarted. The separate file allows us to use external monitoring tools for our logs. It also allows to attach timestamp, IP, etc for every action that is logged. 
+We are using django signals and python library logging. Logging is easy way to get logs to separate file that way we have persistent logs and they aren’t lost when the server is restarted. The separate file allows us to use external monitoring tools for our logs. It also allows to attach timestamp, IP, etc for every action that is logged. Django signals are sent when user logs-in, logs-out or login-failed. Because it is also good idea to log the register of new user and rate limited login attempts, we also do these.
 
 We also make sure that we are escaping any user input from the logs with !r. That will prevent log injection, what might be used to tamper our logs.
 https://community.owasp.org/attacks/Log_Injection
 
 ### How to test:
 try the bruteforce script: run ‘python scripts/flaw_1.py’ in root directory
-and there should be generated a file csp1/auth.log which will log the login attempts for user.
+and there should be generated a file `auth.log` in root dir which will log the login attempts for user.
 
 ### Screenshots
-after ![](https://raw.github.com/HorttanainenSami/cyber-security-base-project/main/screenshots/flaw_3_after.png)
+before ![](https://raw.github.com/HorttanainenSami/cyber-security-base-project/main/screenshots/flaw-3-before-1.png)
+after ![](https://raw.github.com/HorttanainenSami/cyber-security-base-project/main/screenshots/flaw-3-after-1.png)
 ## FLAW 4:
 ## A03:2021 - Injection
 https://github.com/HorttanainenSami/cyber-security-base-project/blob/9bb402dc22343d06198d91b93ef204bbbe0a9154/todo/views/todo.py#L40
@@ -122,13 +127,13 @@ It will return all users from the database with their passwords (hashed)
 Returns all todos from all users
 
 ### How to fix:
-https://github.com/HorttanainenSami/cyber-security-base-project/blob/b22783680b65df50483c819c65e13a6cd1859893/todo/views/todo.py#L54
+https://github.com/HorttanainenSami/cyber-security-base-project/blob/230abc2d8cbe37847a6f8981c079cb4849dbd19b/todo/views/todo.py#L54
 
 In backend should not trust client and clients input should always be parametrized. Here one solution is by using Django’s ORM that will parametrize input automatically. It will send the query and data separately so user input cannot be part of the query.
 
 ### Screenshots
-before ![](https://raw.github.com/HorttanainenSami/cyber-security-base-project/main/screenshots/flaw_4_before.png)
-after ![](https://raw.github.com/HorttanainenSami/cyber-security-base-project/main/screenshots/flaw_4_after.png)
+before ![](https://raw.github.com/HorttanainenSami/cyber-security-base-project/main/screenshots/flaw-4-before-1.png)
+after ![](https://raw.github.com/HorttanainenSami/cyber-security-base-project/main/screenshots/flaw-4-after-1.png)
 
 
 ## FLAW 5:
@@ -143,11 +148,11 @@ Problem is that backend is still trusting client to not try and manipulate the i
 be logged in with non admin user (jaska or joni) and input url http://127.0.0.1:8000/todo/admin/?is_staff=true
 
 ### How to fix:
-https://github.com/HorttanainenSami/cyber-security-base-project/blob/b22783680b65df50483c819c65e13a6cd1859893/todo/views/todo.py#L25
+https://github.com/HorttanainenSami/cyber-security-base-project/blob/230abc2d8cbe37847a6f8981c079cb4849dbd19b/todo/views/todo.py#L25
 
 We are not trusting client and we are checking the privileges from the database.
 Backend should not trust clients data and check the data that is in its own possession, like database. In fix backend is checking whether request making user is in fact privileged to do the action.
 
 ### Screenshots
-before ![](https://raw.github.com/HorttanainenSami/cyber-security-base-project/main/screenshots/flaw_5_before.png)
-after ![](https://raw.github.com/HorttanainenSami/cyber-security-base-project/main/screenshots/flaw_5_after.png)
+before ![](https://raw.github.com/HorttanainenSami/cyber-security-base-project/main/screenshots/flaw-5-before-1.png)
+after ![](https://raw.github.com/HorttanainenSami/cyber-security-base-project/main/screenshots/flaw-5-after-1.png)
